@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemsTable extends Migration
+class CreateSessionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->foreignId('cat_id')->constrained('cats');
-            $table->string('title');
-            $table->string('title_en');
-            $table->integer('price');
-            $table->text('description');
-            $table->string('pic');
-            $table->integer('sort');
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->id();
+            $table->string('pass', 200);
+            $table->text('data');
             $table->unsignedInteger('time_created')->nullable();
             $table->unsignedInteger('time_updated')->nullable();
             $table->unsignedInteger('deleted_at')->nullable();
@@ -36,6 +31,6 @@ class CreateItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('sessions');
     }
 }

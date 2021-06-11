@@ -1,10 +1,7 @@
 <?php
 
-use App\Http\Controllers\AdvertiseController;
-use App\Http\Controllers\CatController;
-use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
-use GuzzleHttp\Promise\TaskQueue;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,42 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::prefix('api/user')->group(function () {
-
-    Route::match(['GET', 'POST'], '/login', [UserController::class, 'login']);
-
+    Route::match(['GET', 'POST'], '/getAccess', [UserController::class, 'getAccess']);
 });
 
-Route::prefix('api/advertise')->group(function () {
-
-    Route::match(['GET', 'POST'], '/', [AdvertiseController::class, 'list']);
-    Route::match(['GET', 'POST'], '/create', [AdvertiseController::class, 'store']);
-    Route::match(['GET', 'POST'], '/update/{advertise}', [AdvertiseController::class, 'update']);
-    Route::match(['GET', 'POST'], '/{advertise}', [AdvertiseController::class, 'get']);
-    Route::match(['GET', 'POST'], '/{advertise}/delete', [AdvertiseController::class, 'destroy']);
-
-});
-
-Route::prefix('api/cat')->group(function () {
-
-    Route::match(['GET', 'POST'], '/', [CatController::class, 'list']);
-    Route::match(['GET', 'POST'], '/create', [CatController::class, 'store']);
-    Route::match(['GET', 'POST'], '/update/{cat}', [CatController::class, 'update']);
-    Route::match(['GET', 'POST'], '/{cat}', [CatController::class, 'get']);
-    Route::match(['GET', 'POST'], '/{cat}/delete', [CatController::class, 'destroy']);
-
-});
-
-Route::prefix('api/item')->group(function () {
-
-    Route::match(['GET', 'POST'], '/', [ItemController::class, 'list']);
-    Route::match(['GET', 'POST'], '/create', [ItemController::class, 'store']);
-    Route::match(['GET', 'POST'], '/update/{item}', [ItemController::class, 'update']);
-    Route::match(['GET', 'POST'], '/{item}', [ItemController::class, 'get']);
-    Route::match(['GET', 'POST'], '/{item}/delete', [ItemController::class, 'destroy']);
-
+Route::prefix('api/post')->middleware(['acl'])->group(function () {
+    Route::match(['GET', 'POST'], '/', [PostController::class, 'list']);
+    Route::match(['GET', 'POST'], '/create', [PostController::class, 'create']);
+    Route::match(['GET', 'POST'], '/{post}', [PostController::class, 'get']);
+    Route::match(['PUT', 'POST', 'GET'], '/update/{post}', [PostController::class, 'update']);
+    Route::match(['DELETE', 'GET', 'POST'], '/delete/{post}', [PostController::class, 'remove']);
 });

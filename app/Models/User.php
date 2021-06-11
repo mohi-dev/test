@@ -16,6 +16,11 @@ class User extends Authenticatable
     const UPDATED_AT = 'time_updated';
 
     protected $fillable = [
-        'name', 'user_name', 'password'
+        'user_name', 'password'
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
 }

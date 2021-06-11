@@ -17,6 +17,7 @@ class Utils extends Model
     {
         return response()->json([
             'status' => true,
+            'code' => 200,
             'result' => $result,
         ]);
     }
@@ -24,10 +25,7 @@ class Utils extends Model
     public static function __callStatic($name, $arguments)
     {
         if ($name == 'DatabaseError') {
-            return self::errorResponse(5, 'sql error');
-        } else if ($name == 'ParamError') {
-            $result = implode(' , ', $arguments[0]);
-            return self::errorResponse(27, $result . ' has wrong data');
+            return self::errorResponse(500, 'sql error');
         }
     }
 
@@ -35,13 +33,8 @@ class Utils extends Model
     {
         return response()->json([
             'status' => false,
-            'error_code' => $error_code,
+            'code' => $error_code,
             'result' => $result
         ]);
-    }
-
-    public static function newException($message, $code)
-    {
-        throw new \Exception($message, $code);
     }
 }
